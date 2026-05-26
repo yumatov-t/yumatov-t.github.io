@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HobbyMate</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav>
+        <div class="nav-inner">
+            <a href="#" class="logo" onclick="navigate('')">HobbyMate</a>
+            <div class="nav-links" id="navLinks">
+                <a href="#" onclick="navigate('events')">Ивенты</a>
+                <a href="#" onclick="navigate('people')">Люди</a>
+                <span id="authLinks"></span>
+            </div>
+        </div>
+    </nav>
+    <main>
+        <div id="flashContainer"></div>
+        <div id="app"></div>
+    </main>
+    <script src="js/app.js"></script>
+</body>
+</html>
