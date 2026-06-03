@@ -8,96 +8,148 @@
 </head>
 <body>
 
-  <!-- Nav -->
+  <!-- ═══ Navigation ═══ -->
   <nav class="nav">
     <div class="nav-inner">
-      <span class="nav-logo">Наташа</span>
-      <div class="nav-links">
-        <a href="#features">Что не так</a>
-        <a href="#stats">Цифры</a>
-        <a href="#meter">Тест</a>
-        <a href="#quotes">Цитаты</a>
+      <a class="nav-logo" href="#">Наташа</a>
+      <div class="nav-center">
+        <a href="#">Факты</a>
+        <a href="#">Статистика</a>
+        <a href="#">Тест</a>
+        <a href="#">Цитаты</a>
+        <a href="#">О проекте</a>
+      </div>
+      <div class="nav-right">
+        <button class="nav-search">
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" stroke-width="1.2"/><path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        </button>
+        <button class="nav-bag">
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M3.5 4.5V3.5C3.5 2.12 4.62 1 6 1H9C10.38 1 11.5 2.12 11.5 3.5V4.5" stroke="currentColor" stroke-width="1.2"/><rect x="1.5" y="4.5" width="12" height="9" rx="1.5" stroke="currentColor" stroke-width="1.2"/></svg>
+        </button>
       </div>
     </div>
   </nav>
 
-  <!-- Hero -->
-  <section class="hero">
+  <!-- ═══ Hero: Основной ═══ -->
+  <section class="hero hero-dark">
+    <div class="hero-bg" style="background: radial-gradient(ellipse 800px 500px at 50% 40%, rgba(255,77,122,0.08), transparent), radial-gradient(ellipse 600px 400px at 30% 70%, rgba(196,77,255,0.05), transparent);"></div>
     <div class="hero-body">
       <h1 class="hero-title">Наташа</h1>
       <p class="hero-subtitle">глупая девочка</p>
-      <p class="hero-slogan">Неоспоримые доказательства. Собрано фактов: <strong>420</strong>.</p>
+      <p class="hero-desc">Коллекция неопровержимых доказательств. Собрано фактов: <strong>420</strong>.</p>
       <div class="hero-actions">
-        <a href="#features" class="hero-btn">Смотреть факты</a>
-        <a href="#meter" class="hero-link">Пройти тест →</a>
+        <a href="#features" class="btn-primary">Смотреть факты</a>
+        <a href="#meter" class="btn-link">Пройти тест →</a>
       </div>
     </div>
-    <div class="hero-visual">
-      <div class="hero-emoji">🤦‍♀️</div>
+    <div class="hero-badge">⚡ Статус: активна</div>
+  </section>
+
+  <!-- ═══ Hero: Инциденты (like iPhone 17 Pro hero) ═══ -->
+  <section class="hero hero-dark hero-product">
+    <div class="hero-bg" style="background: radial-gradient(ellipse 700px 500px at 50% 50%, rgba(255,77,122,0.06), transparent);"></div>
+    <div class="hero-product-body">
+      <h2 class="hero-product-name">Поиск телефона</h2>
+      <p class="hero-product-tagline">Нашла. В руке.</p>
+      <div class="hero-product-info">
+        <span class="hero-product-stat">20 мин</span>
+        <span class="hero-product-stat">время поиска</span>
+      </div>
+      <div class="hero-product-emoji">📱</div>
+    </div>
+    <div class="hero-actions" style="position:absolute;bottom:60px;left:50%;transform:translateX(-50%);">
+      <a href="#features" class="btn-primary">Подробнее</a>
+      <a href="#stats" class="btn-link">Статистика →</a>
     </div>
   </section>
 
-  <!-- Features -->
-  <section class="section" id="features">
-    <div class="section-header">
-      <h2 class="section-title">Характеристики глупости</h2>
-      <p class="section-desc">Каждая деталь подтверждена показаниями очевидцев.</p>
+  <!-- ═══ Hero: Очки (like iPhone 17 hero) ═══ -->
+  <section class="hero hero-dark hero-product">
+    <div class="hero-bg" style="background: radial-gradient(ellipse 600px 400px at 50% 60%, rgba(110,198,255,0.05), transparent);"></div>
+    <div class="hero-product-body">
+      <h2 class="hero-product-name">Очки на голове</h2>
+      <p class="hero-product-tagline">Искала час. Они были там.</p>
+      <div class="hero-product-info">
+        <span class="hero-product-stat">1 ч</span>
+        <span class="hero-product-stat">время поиска</span>
+      </div>
+      <div class="hero-product-emoji">👓</div>
     </div>
-
-    <div class="feature-row">
-      <div class="feature-media">
-        <div class="feature-icon">📱</div>
-      </div>
-      <div class="feature-info">
-        <span class="feature-tag">Инцидент №1</span>
-        <h3 class="feature-name">Поиск телефона</h3>
-        <p class="feature-text">Искала телефон по квартире 20 минут. Всё это время разговаривала по нему с мамой. Свидетели отмечают — паника была абсолютно искренней.</p>
-        <a class="feature-link">Зафиксировано 69 раз</a>
-      </div>
+    <div class="hero-actions" style="position:absolute;bottom:60px;left:50%;transform:translateX(-50%);">
+      <a href="#features" class="btn-primary">Подробнее</a>
+      <a href="#stats" class="btn-link">Статистика →</a>
     </div>
+  </section>
 
-    <div class="feature-row flipped">
-      <div class="feature-media">
-        <div class="feature-icon">👓</div>
+  <!-- ═══ Promo Grid (like Apple's 2-column grid) ═══ -->
+  <section class="promo-grid">
+    <div class="promo-card promo-light">
+      <div class="promo-body">
+        <h3 class="promo-title">Холодильник. Дважды.</h3>
+        <p class="promo-desc">Открыла, закрыла, открыла снова. Забыла зачем.</p>
+        <a href="#features" class="promo-link">Подробнее →</a>
       </div>
-      <div class="feature-info">
-        <span class="feature-tag">Инцидент №2</span>
-        <h3 class="feature-name">Оптический парадокс</h3>
-        <p class="feature-text">Очки искали по всей квартире около часа. Нашли на голове владелицы. На вопрос «как?» был получен ответ: «они как-то сами».</p>
-        <a class="feature-link">Зафиксировано 133 раза</a>
-      </div>
-    </div>
-
-    <div class="feature-row">
-      <div class="feature-media">
-        <div class="feature-icon">❄️</div>
-      </div>
-      <div class="feature-info">
-        <span class="feature-tag">Инцидент №3</span>
-        <h3 class="feature-name">Холодильник. Дважды.</h3>
-        <p class="feature-text">Открыла холодильник, постояла, закрыла. Через 10 секунд открыла снова. На вопрос «зачем?» последовал ответ: «забыла». Диагноз: стабильно.</p>
-        <a class="feature-link">Зафиксировано 256 раз</a>
+      <div class="promo-visual">
+        <span class="promo-emoji">❄️</span>
       </div>
     </div>
-
-    <div class="feature-row flipped">
-      <div class="feature-media">
-        <div class="feature-icon">☕</div>
+    <div class="promo-card promo-light">
+      <div class="promo-body">
+        <h3 class="promo-title">Чайная церемония</h3>
+        <p class="promo-desc">Чайник в холодильнике, молоко в шкафу. Классика.</p>
+        <a href="#features" class="promo-link">Подробнее →</a>
       </div>
-      <div class="feature-info">
-        <span class="feature-tag">Инцидент №4</span>
-        <h3 class="feature-name">Чайная церемония</h3>
-        <p class="feature-text">Налила чай, поставила чайник в холодильник, кружку оставила на столе, молоко убрала в шкаф. Эксперты разводят руками. Третий раз за неделю.</p>
-        <a class="feature-link">Зафиксировано 89 раз</a>
+      <div class="promo-visual">
+        <span class="promo-emoji">☕</span>
+      </div>
+    </div>
+    <div class="promo-card promo-light">
+      <div class="promo-body">
+        <h3 class="promo-title">iPad Air</h3>
+        <p class="promo-desc">Наташа и iPad. Теперь глупость в формате 11 дюймов.</p>
+        <a href="#features" class="promo-link">Подробнее →</a>
+      </div>
+      <div class="promo-visual">
+        <span class="promo-emoji">📱</span>
+      </div>
+    </div>
+    <div class="promo-card promo-light">
+      <div class="promo-body">
+        <h3 class="promo-title">Apple Watch</h3>
+        <p class="promo-desc">Напомнит забыть напомнить о напоминании.</p>
+        <a href="#features" class="promo-link">Подробнее →</a>
+      </div>
+      <div class="promo-visual">
+        <span class="promo-emoji">⌚</span>
+      </div>
+    </div>
+    <div class="promo-card promo-light">
+      <div class="promo-body">
+        <h3 class="promo-title">Apple Card</h3>
+        <p class="promo-desc">Специальное предложение: потрать всё на глупости.</p>
+        <a href="#features" class="promo-link">Узнать больше →</a>
+      </div>
+      <div class="promo-visual">
+        <span class="promo-emoji">💳</span>
+      </div>
+    </div>
+    <div class="promo-card promo-light">
+      <div class="promo-body">
+        <h3 class="promo-title">Трейд-ин</h3>
+        <p class="promo-desc">Обменяй старый телефон на новый. Если найдёшь.</p>
+        <a href="#features" class="promo-link">Оценить →</a>
+      </div>
+      <div class="promo-visual">
+        <span class="promo-emoji">🔄</span>
       </div>
     </div>
   </section>
 
-  <!-- Stats -->
-  <section class="section section-alt" id="stats">
+  <!-- ═══ Stats — как секция на Apple ═══ -->
+  <section class="section section-gray" id="stats">
     <div class="section-header">
-      <h2 class="section-title">Статистика за всё время</h2>
-      <p class="section-desc">Данные обновляются в реальном времени. Шутка. Но могли бы.</p>
+      <h2 class="section-title">Статистика</h2>
+      <p class="section-desc">Данные за всё время наблюдений.</p>
     </div>
     <div class="stats-grid">
       <div class="stat-card">
@@ -119,15 +171,15 @@
     </div>
   </section>
 
-  <!-- Meter -->
+  <!-- ═══ Meter (интерактив) ═══ -->
   <section class="section" id="meter">
     <div class="section-header">
       <h2 class="section-title">Тест на глупость</h2>
-      <p class="section-desc">Определите текущий уровень Наташи в реальном времени.</p>
+      <p class="section-desc">Определите текущий уровень Наташи.</p>
     </div>
-    <div class="meter-wrap">
+    <div class="meter-container">
       <div class="meter-card">
-        <div class="meter-visual">
+        <div class="meter-ring-wrap">
           <svg viewBox="0 0 200 200" class="meter-ring">
             <defs>
               <linearGradient id="meterGrad" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -152,57 +204,147 @@
           <span class="meter-dot"></span>
           Средний уровень
         </div>
-        <button class="meter-btn" id="confettiBtn">Подтвердить результат</button>
+        <button class="confetti-btn" id="confettiBtn">Подтвердить результат →</button>
       </div>
     </div>
   </section>
 
-  <!-- Quotes -->
-  <section class="section section-alt" id="quotes">
+  <!-- ═══ Quotes / Entertainment Gallery ═══ -->
+  <section class="section section-gray" id="quotes">
     <div class="section-header">
-      <h2 class="section-title">Цитаты</h2>
-      <p class="section-desc">Коллекция высказываний, вошедших в историю.</p>
+      <h2 class="section-title">Бесконечный контент</h2>
+      <p class="section-desc">Цитаты, которые хочется переслушивать.</p>
     </div>
-    <div class="quotes">
-      <div class="quote-text" id="quoteText"></div>
-      <div class="quote-context" id="quoteContext"></div>
-      <div class="quote-nav">
-        <button class="quote-btn" id="quotePrev">←</button>
-        <div class="quote-dots" id="quoteDots"></div>
-        <button class="quote-btn" id="quoteNext">→</button>
+    <div class="quotes-showcase">
+      <div class="quote-card">
+        <div class="quote-text" id="quoteText"></div>
+        <div class="quote-context" id="quoteContext"></div>
+        <div class="quote-nav">
+          <button class="quote-btn" id="quotePrev">←</button>
+          <div class="quote-dots" id="quoteDots"></div>
+          <button class="quote-btn" id="quoteNext">→</button>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="footer-top">
-      <div class="footer-note">Наташа, мы тебя всё равно любим ❤️</div>
-      <div class="footer-subnote">но ты глупая девочка</div>
+  <!-- ═══ Gallery (like Apple TV gallery) ═══ -->
+  <section class="section section-dark">
+    <div class="section-header">
+      <h2 class="section-title section-title-light">Развлечения</h2>
+      <p class="section-desc section-desc-light">Наташа рекомендует к просмотру.</p>
     </div>
+    <div class="gallery">
+      <div class="gallery-item">
+        <div class="gallery-visual">📱</div>
+        <div class="gallery-label">Как найти телефон</div>
+        <span class="gallery-tag">Драма</span>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-visual">👓</div>
+        <div class="gallery-label">Где мои очки</div>
+        <span class="gallery-tag">Детектив</span>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-visual">❄️</div>
+        <div class="gallery-label">Холодильник: история</div>
+        <span class="gallery-tag">Триллер</span>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-visual">☕</div>
+        <div class="gallery-label">Чайная церемония</div>
+        <span class="gallery-tag">Комедия</span>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-visual">🗝️</div>
+        <div class="gallery-label">Ключи в замке</div>
+        <span class="gallery-tag">Экшн</span>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-visual">🤦</div>
+        <div class="gallery-label">Лицо ладонью</div>
+        <span class="gallery-tag">Мелодрама</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ Footer (Apple-style) ═══ -->
+  <footer class="footer">
+    <div class="footer-note">
+      Наташа, мы тебя всё равно любим ❤️
+      <span class="footer-note-sub">но ты глупая девочка</span>
+    </div>
+
     <div class="footer-links">
       <div class="footer-col">
         <h4>Познавательное</h4>
         <a href="#">Как не потерять телефон</a>
         <a href="#">Где искать очки</a>
         <a href="#">Зачем открывать холодильник</a>
+        <a href="#">Как заварить чай</a>
+        <a href="#">Куда положить ключи</a>
       </div>
       <div class="footer-col">
         <h4>Поддержка</h4>
         <a href="#">Позвать маму</a>
         <a href="#">Позвать папу</a>
         <a href="#">Вызвать МЧС</a>
+        <a href="#">Наташа, ну пожалуйста</a>
+      </div>
+      <div class="footer-col">
+        <h4>Аккаунт</h4>
+        <a href="#">Управлять аккаунтом</a>
+        <a href="#">iCloud</a>
+        <a href="#">Найти iPhone</a>
+        <a href="#">Найти очки</a>
+      </div>
+      <div class="footer-col">
+        <h4>Развлечения</h4>
+        <a href="#">Наташа+</a>
+        <a href="#">Наташа Music</a>
+        <a href="#">Наташа Arcade</a>
+        <a href="#">Наташа Fitness+</a>
+        <a href="#">Наташа News+</a>
+      </div>
+      <div class="footer-col">
+        <h4>Для бизнеса</h4>
+        <a href="#">Наташа и бизнес</a>
+        <a href="#">Глупость для бизнеса</a>
+      </div>
+      <div class="footer-col">
+        <h4>Для образования</h4>
+        <a href="#">Наташа и образование</a>
+        <a href="#">Курс: как не быть глупой</a>
+        <a href="#">Для студентов</a>
+      </div>
+      <div class="footer-col">
+        <h4>Ценности Наташи</h4>
+        <a href="#">Доступность</a>
+        <a href="#">Окружающая среда</a>
+        <a href="#">Конфиденциальность</a>
       </div>
       <div class="footer-col">
         <h4>О проекте</h4>
         <a href="#">Основано на реальных событиях</a>
         <a href="#">Имена изменены</a>
-        <a href="#">Наташа, прости</a>
+        <a href="#">Наташа, прости нас</a>
+        <a href="#">Карьера</a>
+        <a href="#">Контакты</a>
       </div>
     </div>
+
     <div class="footer-legal">
-      <span>© 2026 Natashainc. Все права защищены.</span>
-      <span>Сделано с любовью (и сарказмом)</span>
+      <div class="footer-legal-links">
+        <a href="#">Политика конфиденциальности</a>
+        <a href="#">Условия использования</a>
+        <a href="#">Продажи и возврат</a>
+        <a href="#">Юридическая информация</a>
+        <a href="#">Карта сайта</a>
+      </div>
+      <div class="footer-legal-copy">
+        <span>© 2026 Natashainc. Все права защищены.</span>
+        <span>Сделано с любовью (и сарказмом)</span>
+      </div>
     </div>
   </footer>
 

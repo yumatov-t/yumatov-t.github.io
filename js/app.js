@@ -2,24 +2,24 @@
   'use strict';
 
   /* ---------- Scroll Reveal ---------- */
-  const revealTargets = document.querySelectorAll(
-    '.feature-row, .stat-card, .meter-card, .section-header, .quotes'
+  const targets = document.querySelectorAll(
+    '.section-header, .stat-card, .meter-card, .quotes-showcase, .gallery, .promo-card'
   );
 
-  const revealObserver = new IntersectionObserver(
+  const observer = new IntersectionObserver(
     (entries) => {
       for (const entry of entries) {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
-          revealObserver.unobserve(entry.target);
+          observer.unobserve(entry.target);
         }
       }
     },
-    { threshold: 0.15, rootMargin: '0px 0px -60px 0px' }
+    { threshold: 0.12, rootMargin: '0px 0px -50px 0px' }
   );
 
-  for (const el of revealTargets) {
-    revealObserver.observe(el);
+  for (const el of targets) {
+    observer.observe(el);
   }
 
   /* ---------- Counters ---------- */
@@ -87,7 +87,7 @@
     const offset = circumference - (p / 100) * circumference;
     arc.setAttribute('stroke-dashoffset', offset);
 
-    const level = levels.find((l) => p <= l.max) || levels[levels.length - 1];
+    const level = levels.find(function (l) { return p <= l.max; }) || levels[levels.length - 1];
     status.innerHTML = '<span class="meter-dot"></span> ' + level.text;
 
     const hue = 280 - p * 2.8;
@@ -284,13 +284,12 @@
   document.addEventListener('click', getAudio, { once: true });
   document.addEventListener('touchstart', getAudio, { once: true });
 
-  /* ---------- Nav links smooth scroll ---------- */
-  const navLinks = document.querySelectorAll('.nav-links a, .hero-btn, .hero-link');
-
-  for (const link of navLinks) {
+  /* ---------- Smooth scroll ---------- */
+  const scrollLinks = document.querySelectorAll('a[href^="#"]');
+  for (const link of scrollLinks) {
     link.addEventListener('click', function (e) {
       const href = this.getAttribute('href');
-      if (href && href.startsWith('#')) {
+      if (href && href !== '#') {
         e.preventDefault();
         const target = document.querySelector(href);
         if (target) {
