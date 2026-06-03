@@ -2,7 +2,9 @@
   'use strict';
 
   /* ---------- Scroll Reveal ---------- */
-  const revealElements = document.querySelectorAll('.reveal');
+  const revealTargets = document.querySelectorAll(
+    '.feature-row, .stat-card, .meter-card, .section-header, .quotes'
+  );
 
   const revealObserver = new IntersectionObserver(
     (entries) => {
@@ -16,11 +18,11 @@
     { threshold: 0.15, rootMargin: '0px 0px -60px 0px' }
   );
 
-  for (const el of revealElements) {
+  for (const el of revealTargets) {
     revealObserver.observe(el);
   }
 
-  /* ---------- Counter Animation ---------- */
+  /* ---------- Counters ---------- */
   const counters = document.querySelectorAll('.count-up');
 
   const counterObserver = new IntersectionObserver(
@@ -50,9 +52,7 @@
       const progress = Math.min(elapsed / duration, 1);
       const eased = 1 - Math.pow(1 - progress, 3);
       const current = Math.floor(eased * target);
-
       el.textContent = current.toLocaleString();
-
       if (progress < 1) {
         requestAnimationFrame(tick);
       } else {
@@ -63,14 +63,14 @@
     requestAnimationFrame(tick);
   }
 
-  /* ---------- Meter / Gauge ---------- */
+  /* ---------- Meter ---------- */
   const slider = document.getElementById('meterSlider');
   const arc = document.getElementById('meterArc');
   const val = document.getElementById('meterValue');
   const status = document.getElementById('meterStatus');
 
   const levels = [
-    { max: 15, text: 'Сегодня всё в порядке. Подозрительно.' },
+    { max: 15, text: 'С Наташей всё в порядке. День чудес.' },
     { max: 30, text: 'Лёгкая рассеянность. Бывает.' },
     { max: 45, text: 'Уже забыла, что делала 5 минут назад.' },
     { max: 60, text: 'Средний уровень глупости по паспорту.' },
@@ -81,19 +81,18 @@
 
   function updateMeter(percent) {
     const p = parseInt(percent, 10);
-
     val.textContent = p + '%';
 
-    const circumference = 534;
+    const circumference = 515;
     const offset = circumference - (p / 100) * circumference;
     arc.setAttribute('stroke-dashoffset', offset);
 
     const level = levels.find((l) => p <= l.max) || levels[levels.length - 1];
-    status.textContent = level.text;
+    status.innerHTML = '<span class="meter-dot"></span> ' + level.text;
 
     const hue = 280 - p * 2.8;
-    status.style.borderColor = `hsla(${hue}, 100%, 60%, ${0.05 + p / 100 * 0.25})`;
-    status.style.background = `rgba(196,77,255,${p / 100 * 0.06})`;
+    status.style.borderColor = 'hsla(' + hue + ', 70%, 50%, ' + (0.04 + p / 100 * 0.2) + ')';
+    status.style.background = 'rgba(196,77,255,' + (p / 100 * 0.03) + ')';
   }
 
   slider.addEventListener('input', function () {
@@ -108,9 +107,9 @@
     { text: 'Я не глупая, я просто творческая', context: '— после того как уронила телефон в суп' },
     { text: 'Ой, а почему холодильник гудит?', context: '— потому что он включён в розетку' },
     { text: 'Я сегодня очень продуктивная', context: '— проведя 4 часа в TikTok' },
-    { text: 'Где мои ключи? А, неважно', context: '— ключи были в замке зажигания. Машина заведена.' },
+    { text: 'Где мои ключи? А, неважно', context: '— ключи в замке зажигания. Машина заведена.' },
     { text: 'Я сделала уроки!', context: '— глядя на дневник с двойкой' },
-    { text: 'Это не я, это они сами', context: '— стандартная защита' },
+    { text: 'Это не я, это они сами', context: '— стандартная защита Наташи' },
     { text: 'Я просто хотела как лучше', context: '— эпиграф к биографии' },
   ];
 
@@ -179,16 +178,16 @@
     confettiRunning = true;
 
     pieces = [];
-    for (let i = 0; i < 180; i++) {
+    for (let i = 0; i < 200; i++) {
       pieces.push({
         x: Math.random() * confettiCanvas.width,
-        y: -20 - Math.random() * 80,
+        y: -20 - Math.random() * 100,
         w: 5 + Math.random() * 7,
         h: 3 + Math.random() * 5,
-        sx: (Math.random() - 0.5) * 2.5,
-        sy: 1.5 + Math.random() * 3,
+        sx: (Math.random() - 0.5) * 3,
+        sy: 2 + Math.random() * 3,
         r: Math.random() * 360,
-        rs: (Math.random() - 0.5) * 8,
+        rs: (Math.random() - 0.5) * 10,
         hue: Math.random() * 360,
         sat: 70 + Math.random() * 30,
         lit: 50 + Math.random() * 30,
@@ -219,7 +218,7 @@
       cctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
       cctx.restore();
 
-      if (p.y > confettiCanvas.height + 40) {
+      if (p.y > confettiCanvas.height + 50) {
         pieces.splice(i, 1);
       }
     }
@@ -228,7 +227,6 @@
       requestAnimationFrame(animateConfetti);
     } else {
       confettiRunning = false;
-      cctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
     }
   }
 
@@ -254,7 +252,7 @@
       o.type = 'sine';
       o.frequency.setValueAtTime(800, ctx.currentTime);
       o.frequency.exponentialRampToValueAtTime(300, ctx.currentTime + 0.1);
-      g.gain.setValueAtTime(0.04, ctx.currentTime);
+      g.gain.setValueAtTime(0.03, ctx.currentTime);
       g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
       o.start(ctx.currentTime);
       o.stop(ctx.currentTime + 0.12);
@@ -272,7 +270,7 @@
         g.connect(ctx.destination);
         o.type = 'sine';
         o.frequency.setValueAtTime(notes[i], ctx.currentTime + i * 0.1);
-        g.gain.setValueAtTime(0.04, ctx.currentTime + i * 0.1);
+        g.gain.setValueAtTime(0.03, ctx.currentTime + i * 0.1);
         g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.1 + 0.25);
         o.start(ctx.currentTime + i * 0.1);
         o.stop(ctx.currentTime + i * 0.1 + 0.25);
@@ -286,8 +284,9 @@
   document.addEventListener('click', getAudio, { once: true });
   document.addEventListener('touchstart', getAudio, { once: true });
 
-  /* ---------- Smooth scroll for nav ---------- */
-  const navLinks = document.querySelectorAll('.nav-links a, .hero-cta');
+  /* ---------- Nav links smooth scroll ---------- */
+  const navLinks = document.querySelectorAll('.nav-links a, .hero-btn, .hero-link');
+
   for (const link of navLinks) {
     link.addEventListener('click', function (e) {
       const href = this.getAttribute('href');
@@ -300,20 +299,4 @@
       }
     });
   }
-
-  /* ---------- Nav background on scroll ---------- */
-  const nav = document.querySelector('.nav');
-  let lastScroll = 0;
-
-  window.addEventListener('scroll', function () {
-    const scrollY = window.scrollY;
-    if (scrollY > 60) {
-      nav.style.background = 'rgba(0,0,0,0.8)';
-      nav.style.borderBottomColor = 'rgba(255,255,255,0.08)';
-    } else {
-      nav.style.background = 'rgba(0,0,0,0.6)';
-      nav.style.borderBottomColor = 'rgba(255,255,255,0.06)';
-    }
-    lastScroll = scrollY;
-  });
 })();
