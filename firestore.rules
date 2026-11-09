@@ -1,0 +1,216 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global Safety Net: Default-deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Hardened Global Helpers
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerified() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function hasValidParentUser(userId) {
+      return exists(/databases/$(database)/documents/users/$(userId)) &&
+        get(/databases/$(database)/documents/users/$(userId)).data.uid == request.auth.uid;
+    }
+
+    // Entity Validation Blueprints
+    function isValidUserProfile(data) {
+      return data.keys().hasAll(['uid', 'displayName', 'email', 'theme', 'language', 'createdAt', 'updatedAt']) &&
+        data.keys().hasOnly(['uid', 'displayName', 'email', 'theme', 'language', 'createdAt', 'updatedAt']) &&
+        data.uid is string && data.uid.size() >= 1 && data.uid.size() <= 128 && data.uid.matches('^[a-zA-Z0-9_\\-]+$') &&
+        data.uid == request.auth.uid &&
+        data.displayName is string && data.displayName.size() >= 1 && data.displayName.size() <= 100 &&
+        data.email is string && data.email.size() >= 3 && data.email.size() <= 254 &&
+        data.theme is string && data.theme.size() <= 10 && (data.theme == 'dark' || data.theme == 'light') &&
+        data.language is string && data.language.size() <= 5 && (data.language == 'ru' || data.language == 'en') &&
+        data.createdAt is timestamp &&
+        data.updatedAt is timestamp;
+    }
+
+    function isValidHabitDoc(data) {
+      return data.keys().hasAll(['uid', 'title', 'description', 'category', 'frequency', 'targetPerWeek', 'status', 'createdAt', 'updatedAt']) &&
+        data.keys().hasOnly(['uid', 'title', 'description', 'category', 'frequency', 'targetPerWeek', 'status', 'createdAt', 'updatedAt']) &&
+        data.uid is string && data.uid.size() >= 1 && data.uid.size() <= 128 && data.uid.matches('^[a-zA-Z0-9_\\-]+$') &&
+        data.uid == request.auth.uid &&
+        data.title is string && data.title.size() >= 1 && data.title.size() <= 140 &&
+        data.description is string && data.description.size() <= 500 &&
+        data.category is string && data.category.size() <= 20 &&
+        (data.category == 'body' || data.category == 'mind' || data.category == 'craft' || data.category == 'order' || data.category == 'recovery') &&
+        data.frequency is string && data.frequency.size() <= 20 &&
+        (data.frequency == 'daily' || data.frequency == 'weekdays' || data.frequency == 'weekly') &&
+        data.targetPerWeek is int && data.targetPerWeek >= 1 && data.targetPerWeek <= 7 &&
+        data.status is string && data.status.size() <= 20 &&
+        (data.status == 'active' || data.status == 'paused' || data.status == 'archived') &&
+        data.createdAt is timestamp &&
+        data.updatedAt is timestamp;
+    }
+
+    function isValidTaskDoc(data) {
+      return data.keys().hasAll(['uid', 'title', 'notes', 'priority', 'category', 'dueDate', 'completed', 'goalId', 'createdAt', 'updatedAt']) &&
+        data.keys().hasOnly(['uid', 'title', 'notes', 'priority', 'category', 'dueDate', 'completed', 'goalId', 'createdAt', 'updatedAt']) &&
+        data.uid is string && data.uid.size() >= 1 && data.uid.size() <= 128 && data.uid.matches('^[a-zA-Z0-9_\\-]+$') &&
+        data.uid == request.auth.uid &&
+        data.title is string && data.title.size() >= 1 && data.title.size() <= 200 &&
+        data.notes is string && data.notes.size() <= 1000 &&
+        data.priority is string && data.priority.size() <= 10 &&
+        (data.priority == 'high' || data.priority == 'medium' || data.priority == 'low') &&
+        data.category is string && data.category.size() <= 20 &&
+        (data.category == 'deep-work' || data.category == 'operations' || data.category == 'health' || data.category == 'learning' || data.category == 'personal') &&
+        data.dueDate is string && data.dueDate.size() == 10 &&
+        data.completed is bool &&
+        data.goalId is string && data.goalId.size() >= 1 && data.goalId.size() <= 128 &&
+        data.createdAt is timestamp &&
+        data.updatedAt is timestamp;
+    }
+
+    function isValidGoalDoc(data) {
+      return data.keys().hasAll(['uid', 'title', 'outcome', 'targetDate', 'status', 'progress', 'createdAt', 'updatedAt']) &&
+        data.keys().hasOnly(['uid', 'title', 'outcome', 'targetDate', 'status', 'progress', 'createdAt', 'updatedAt']) &&
+        data.uid is string && data.uid.size() >= 1 && data.uid.size() <= 128 && data.uid.matches('^[a-zA-Z0-9_\\-]+$') &&
+        data.uid == request.auth.uid &&
+        data.title is string && data.title.size() >= 1 && data.title.size() <= 160 &&
+        data.outcome is string && data.outcome.size() >= 1 && data.outcome.size() <= 800 &&
+        data.targetDate is string && data.targetDate.size() == 10 &&
+        data.status is string && data.status.size() <= 20 &&
+        (data.status == 'in_progress' || data.status == 'at_risk' || data.status == 'achieved' || data.status == 'paused') &&
+        data.progress is int && data.progress >= 0 && data.progress <= 100 &&
+        data.createdAt is timestamp &&
+        data.updatedAt is timestamp;
+    }
+
+    function isValidJournalDoc(data) {
+      return data.keys().hasAll(['uid', 'date', 'wentWell', 'didNotWork', 'why', 'improveTomorrow', 'mood', 'createdAt', 'updatedAt']) &&
+        data.keys().hasOnly(['uid', 'date', 'wentWell', 'didNotWork', 'why', 'improveTomorrow', 'mood', 'createdAt', 'updatedAt']) &&
+        data.uid is string && data.uid.size() >= 1 && data.uid.size() <= 128 && data.uid.matches('^[a-zA-Z0-9_\\-]+$') &&
+        data.uid == request.auth.uid &&
+        data.date is string && data.date.size() == 10 &&
+        data.wentWell is string && data.wentWell.size() >= 1 && data.wentWell.size() <= 1500 &&
+        data.didNotWork is string && data.didNotWork.size() <= 1500 &&
+        data.why is string && data.why.size() <= 1500 &&
+        data.improveTomorrow is string && data.improveTomorrow.size() <= 1500 &&
+        data.mood is string && data.mood.size() <= 20 &&
+        (data.mood == 'focused' || data.mood == 'steady' || data.mood == 'strained' || data.mood == 'recovering') &&
+        data.createdAt is timestamp &&
+        data.updatedAt is timestamp;
+    }
+
+    // Collection: /users/{userId}
+    match /users/{userId} {
+      allow get: if isOwner(userId) && isValidId(userId) && (resource == null || existing().uid == request.auth.uid);
+      allow list: if false;
+      allow create: if isVerified() && isOwner(userId) && isValidId(userId) &&
+        isValidUserProfile(incoming()) &&
+        incoming().createdAt == request.time &&
+        incoming().updatedAt == request.time;
+      allow update: if isVerified() && isOwner(userId) && isValidId(userId) &&
+        isValidUserProfile(incoming()) &&
+        incoming().uid == existing().uid &&
+        incoming().createdAt == existing().createdAt &&
+        incoming().updatedAt == request.time &&
+        incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'email', 'theme', 'language', 'updatedAt']);
+      allow delete: if isVerified() && isOwner(userId) && isValidId(userId) && existing().uid == request.auth.uid;
+
+      // Subcollection: /users/{userId}/habits/{habitId}
+      match /habits/{habitId} {
+        allow get: if isOwner(userId) && isValidId(userId) && isValidId(habitId) && (resource == null || existing().uid == request.auth.uid) && hasValidParentUser(userId);
+        allow list: if isOwner(userId) && existing().uid == request.auth.uid;
+        allow create: if isVerified() && isOwner(userId) && isValidId(userId) && isValidId(habitId) &&
+          isValidHabitDoc(incoming()) &&
+          incoming().createdAt == request.time &&
+          incoming().updatedAt == request.time &&
+          hasValidParentUser(userId);
+        allow update: if isVerified() && isOwner(userId) && isValidId(userId) && isValidId(habitId) &&
+          isValidHabitDoc(incoming()) &&
+          incoming().uid == existing().uid &&
+          incoming().createdAt == existing().createdAt &&
+          incoming().updatedAt == request.time &&
+          existing().status != 'archived' &&
+          incoming().diff(existing()).affectedKeys().hasOnly(['title', 'description', 'category', 'frequency', 'targetPerWeek', 'status', 'updatedAt']) &&
+          hasValidParentUser(userId);
+        allow delete: if isVerified() && isOwner(userId) && isValidId(userId) && isValidId(habitId) && existing().uid == request.auth.uid && hasValidParentUser(userId);
+      }
+
+      // Subcollection: /users/{userId}/tasks/{taskId}
+      match /tasks/{taskId} {
+        allow get: if isOwner(userId) && isValidId(userId) && isValidId(taskId) && (resource == null || existing().uid == request.auth.uid) && hasValidParentUser(userId);
+        allow list: if isOwner(userId) && existing().uid == request.auth.uid;
+        allow create: if isVerified() && isOwner(userId) && isValidId(userId) && isValidId(taskId) &&
+          isValidTaskDoc(incoming()) &&
+          incoming().createdAt == request.time &&
+          incoming().updatedAt == request.time &&
+          hasValidParentUser(userId);
+        allow update: if isVerified() && isOwner(userId) && isValidId(userId) && isValidId(taskId) &&
+          isValidTaskDoc(incoming()) &&
+          incoming().uid == existing().uid &&
+          incoming().createdAt == existing().createdAt &&
+          incoming().updatedAt == request.time &&
+          incoming().diff(existing()).affectedKeys().hasOnly(['title', 'notes', 'priority', 'category', 'dueDate', 'completed', 'goalId', 'updatedAt']) &&
+          hasValidParentUser(userId);
+        allow delete: if isVerified() && isOwner(userId) && isValidId(userId) && isValidId(taskId) && existing().uid == request.auth.uid && hasValidParentUser(userId);
+      }
+
+      // Subcollection: /users/{userId}/goals/{goalId}
+      match /goals/{goalId} {
+        allow get: if isOwner(userId) && isValidId(userId) && isValidId(goalId) && (resource == null || existing().uid == request.auth.uid) && hasValidParentUser(userId);
+        allow list: if isOwner(userId) && existing().uid == request.auth.uid;
+        allow create: if isVerified() && isOwner(userId) && isValidId(userId) && isValidId(goalId) &&
+          isValidGoalDoc(incoming()) &&
+          incoming().createdAt == request.time &&
+          incoming().updatedAt == request.time &&
+          hasValidParentUser(userId);
+        allow update: if isVerified() && isOwner(userId) && isValidId(userId) && isValidId(goalId) &&
+          isValidGoalDoc(incoming()) &&
+          incoming().uid == existing().uid &&
+          incoming().createdAt == existing().createdAt &&
+          incoming().updatedAt == request.time &&
+          existing().status != 'achieved' &&
+          incoming().diff(existing()).affectedKeys().hasOnly(['title', 'outcome', 'targetDate', 'status', 'progress', 'updatedAt']) &&
+          hasValidParentUser(userId);
+        allow delete: if isVerified() && isOwner(userId) && isValidId(userId) && isValidId(goalId) && existing().uid == request.auth.uid && hasValidParentUser(userId);
+      }
+
+      // Subcollection: /users/{userId}/journal/{entryId}
+      match /journal/{entryId} {
+        allow get: if isOwner(userId) && isValidId(userId) && isValidId(entryId) && (resource == null || existing().uid == request.auth.uid) && hasValidParentUser(userId);
+        allow list: if isOwner(userId) && existing().uid == request.auth.uid;
+        allow create: if isVerified() && isOwner(userId) && isValidId(userId) && isValidId(entryId) &&
+          isValidJournalDoc(incoming()) &&
+          incoming().createdAt == request.time &&
+          incoming().updatedAt == request.time &&
+          hasValidParentUser(userId);
+        allow update: if isVerified() && isOwner(userId) && isValidId(userId) && isValidId(entryId) &&
+          isValidJournalDoc(incoming()) &&
+          incoming().uid == existing().uid &&
+          incoming().createdAt == existing().createdAt &&
+          incoming().updatedAt == request.time &&
+          incoming().diff(existing()).affectedKeys().hasOnly(['date', 'wentWell', 'didNotWork', 'why', 'improveTomorrow', 'mood', 'updatedAt']) &&
+          hasValidParentUser(userId);
+        allow delete: if isVerified() && isOwner(userId) && isValidId(userId) && isValidId(entryId) && existing().uid == request.auth.uid && hasValidParentUser(userId);
+      }
+    }
+  }
+}

@@ -1,0 +1,305 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User account preferences and identity metadata.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Owner Firebase UID",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "User display name",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "User email address",
+          "minLength": 3,
+          "maxLength": 254
+        },
+        "theme": {
+          "type": "string",
+          "description": "Preferred visual theme",
+          "enum": ["dark", "light"]
+        },
+        "language": {
+          "type": "string",
+          "description": "Preferred interface language",
+          "enum": ["ru", "en"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server update timestamp"
+        }
+      },
+      "required": ["uid", "displayName", "email", "theme", "language", "createdAt", "updatedAt"]
+    },
+    "HabitDoc": {
+      "title": "HabitDoc",
+      "description": "A tracked personal habit with schedule and consistency metadata.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Owner UID",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "title": {
+          "type": "string",
+          "description": "Habit title",
+          "minLength": 1,
+          "maxLength": 140
+        },
+        "description": {
+          "type": "string",
+          "description": "Habit rationale or minimum viable action",
+          "minLength": 0,
+          "maxLength": 500
+        },
+        "category": {
+          "type": "string",
+          "description": "Habit domain category",
+          "enum": ["body", "mind", "craft", "order", "recovery"]
+        },
+        "frequency": {
+          "type": "string",
+          "description": "Schedule cadence",
+          "enum": ["daily", "weekdays", "weekly"]
+        },
+        "targetPerWeek": {
+          "type": "number",
+          "description": "Target completions per week (1 to 7)"
+        },
+        "status": {
+          "type": "string",
+          "description": "Habit lifecycle state",
+          "enum": ["active", "paused", "archived"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server update timestamp"
+        }
+      },
+      "required": ["uid", "title", "description", "category", "frequency", "targetPerWeek", "status", "createdAt", "updatedAt"]
+    },
+    "TaskDoc": {
+      "title": "TaskDoc",
+      "description": "An actionable task with priority, deadline, and completion state.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Owner UID",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "title": {
+          "type": "string",
+          "description": "Task title",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "notes": {
+          "type": "string",
+          "description": "Task context or execution notes",
+          "minLength": 0,
+          "maxLength": 1000
+        },
+        "priority": {
+          "type": "string",
+          "description": "Execution priority",
+          "enum": ["high", "medium", "low"]
+        },
+        "category": {
+          "type": "string",
+          "description": "Task category",
+          "enum": ["deep-work", "operations", "health", "learning", "personal"]
+        },
+        "dueDate": {
+          "type": "string",
+          "description": "ISO date string YYYY-MM-DD",
+          "minLength": 10,
+          "maxLength": 10
+        },
+        "completed": {
+          "type": "boolean",
+          "description": "Whether the task is completed"
+        },
+        "goalId": {
+          "type": "string",
+          "description": "Optional linked goal ID or 'none'",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server update timestamp"
+        }
+      },
+      "required": ["uid", "title", "notes", "priority", "category", "dueDate", "completed", "goalId", "createdAt", "updatedAt"]
+    },
+    "GoalDoc": {
+      "title": "GoalDoc",
+      "description": "A long-term objective with measurable outcome and progress.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Owner UID",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "title": {
+          "type": "string",
+          "description": "Goal title",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "outcome": {
+          "type": "string",
+          "description": "Concrete definition of done",
+          "minLength": 1,
+          "maxLength": 800
+        },
+        "targetDate": {
+          "type": "string",
+          "description": "ISO target date YYYY-MM-DD",
+          "minLength": 10,
+          "maxLength": 10
+        },
+        "status": {
+          "type": "string",
+          "description": "Goal lifecycle status",
+          "enum": ["in_progress", "at_risk", "achieved", "paused"]
+        },
+        "progress": {
+          "type": "number",
+          "description": "Completion percentage 0 to 100"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server update timestamp"
+        }
+      },
+      "required": ["uid", "title", "outcome", "targetDate", "status", "progress", "createdAt", "updatedAt"]
+    },
+    "JournalDoc": {
+      "title": "JournalDoc",
+      "description": "A structured daily reflection entry.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Owner UID",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "date": {
+          "type": "string",
+          "description": "ISO date YYYY-MM-DD",
+          "minLength": 10,
+          "maxLength": 10
+        },
+        "wentWell": {
+          "type": "string",
+          "description": "What went well today",
+          "minLength": 1,
+          "maxLength": 1500
+        },
+        "didNotWork": {
+          "type": "string",
+          "description": "What did not go as planned",
+          "minLength": 0,
+          "maxLength": 1500
+        },
+        "why": {
+          "type": "string",
+          "description": "Root cause analysis",
+          "minLength": 0,
+          "maxLength": 1500
+        },
+        "improveTomorrow": {
+          "type": "string",
+          "description": "Concrete adjustment for tomorrow",
+          "minLength": 0,
+          "maxLength": 1500
+        },
+        "mood": {
+          "type": "string",
+          "description": "Energy and focus state",
+          "enum": ["focused", "steady", "strained", "recovering"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server update timestamp"
+        }
+      },
+      "required": ["uid", "date", "wentWell", "didNotWork", "why", "improveTomorrow", "mood", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Private user profile and preferences."
+    },
+    "/users/{userId}/habits/{habitId}": {
+      "schema": { "$ref": "#/entities/HabitDoc" },
+      "description": "User habits subcollection."
+    },
+    "/users/{userId}/tasks/{taskId}": {
+      "schema": { "$ref": "#/entities/TaskDoc" },
+      "description": "User tasks subcollection."
+    },
+    "/users/{userId}/goals/{goalId}": {
+      "schema": { "$ref": "#/entities/GoalDoc" },
+      "description": "User long-term goals subcollection."
+    },
+    "/users/{userId}/journal/{entryId}": {
+      "schema": { "$ref": "#/entities/JournalDoc" },
+      "description": "User daily reflection entries subcollection."
+    }
+  }
+}

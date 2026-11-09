@@ -1,0 +1,6 @@
+{
+  "name": "DISCIPLINE",
+  "description": "Editorial personal productivity, habit consistency, task management, long-term goals, and recovery system. Build consistency. Not perfection.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
