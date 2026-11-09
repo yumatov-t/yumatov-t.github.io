@@ -35,6 +35,7 @@ import {
 import {
   auth,
   deleteCloudDocument,
+  loadCloudWorkspaceForUser,
   onAuthStateChanged,
   signOut,
   syncGoalToCloud,
@@ -139,7 +140,7 @@ export default function App() {
   // Test Firestore connection on boot and listen to Firebase Auth state
   useEffect(() => {
     testFirestoreConnection();
-    const unsub = onAuthStateChanged(auth, (fbUser) => {
+    const unsub = onAuthStateChanged(auth, async (fbUser) => {
       if (fbUser) {
         const fbAccount: UserAccount = {
           uid: fbUser.uid,
@@ -152,13 +153,13 @@ export default function App() {
         };
         setUser(fbAccount);
         setActiveSessionUser(fbAccount);
-        syncUserProfileToCloud({
-          uid: fbAccount.uid,
-          displayName: fbAccount.displayName,
-          email: fbAccount.email,
-          theme,
-          language,
-        });
+        const localFallback = loadWorkspaceForUser(fbAccount.uid);
+        const cloudWs = await loadCloudWorkspaceForUser(
+          fbAccount.uid,
+          localFallback
+        );
+        setWorkspace(cloudWs);
+        saveWorkspaceForUser(fbAccount.uid, cloudWs);
       }
     });
     return () => unsub();
@@ -232,14 +233,22 @@ export default function App() {
     setAuthModalOpen(true);
   };
 
-  const handleAuthenticated = (authenticatedUser: UserAccount) => {
+  const handleAuthenticated = async (authenticatedUser: UserAccount) => {
     setUser(authenticatedUser);
     setActiveSessionUser(authenticatedUser);
-    const userWs = localizeWorkspaceSeedItems(
+    const localWs = localizeWorkspaceSeedItems(
       loadWorkspaceForUser(authenticatedUser.uid),
       language
     );
-    setWorkspace(userWs);
+    setWorkspace(localWs);
+    if (authenticatedUser.authProvider === 'firebase') {
+      const cloudWs = await loadCloudWorkspaceForUser(
+        authenticatedUser.uid,
+        localWs
+      );
+      setWorkspace(cloudWs);
+      saveWorkspaceForUser(authenticatedUser.uid, cloudWs);
+    }
     triggerToast(t.savedFeedback);
   };
 
@@ -754,13 +763,22 @@ export default function App() {
               </button>
             </div>
           ) : (
-            <button
-              type="button"
-              onClick={() => handleOpenAuth('login')}
-              className="hidden sm:inline-flex px-3 py-1.5 text-xs font-medium border border-[var(--border)] bg-[var(--surface)] text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors cursor-pointer whitespace-nowrap"
-            >
-              {t.authSignIn}
-            </button>
+            <div className="hidden sm:flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => handleOpenAuth('login')}
+                className="px-3 py-1.5 text-xs font-medium border border-[var(--border)] bg-[var(--surface)] text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors cursor-pointer whitespace-nowrap"
+              >
+                {t.authSignIn}
+              </button>
+              <button
+                type="button"
+                onClick={() => handleOpenAuth('register')}
+                className="px-3 py-1.5 text-xs font-medium border border-[var(--border)] bg-[var(--surface)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--accent)] transition-colors cursor-pointer whitespace-nowrap"
+              >
+                {t.authRegister}
+              </button>
+            </div>
           )}
 
           <button
@@ -1073,6 +1091,7 @@ export default function App() {
         isOpen={authModalOpen}
         initialMode={authInitialMode}
         language={language}
+        theme={theme}
         onClose={() => setAuthModalOpen(false)}
         onAuthenticated={handleAuthenticated}
       />
